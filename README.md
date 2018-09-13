@@ -9,13 +9,19 @@ Forget about:
 
 From the author of [this famous SO question](https://stackoverflow.com/a/28046731/82609) about debouncing with React.
 
+# Install
+
+`yarn add awesome-debounce-promise`
+
+`npm install awesome-debounce-promise --save`
+
+`import AwesomeDebouncePromise from 'awesome-debounce-promise';`
+
 # Usecases
 
 ## Debouncing a search input
 
 ```jsx harmony
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
-
 const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
 
 const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
@@ -43,8 +49,6 @@ When calling `debouncedSearchAPI`:
 ## Debouncing the background saving of some form items
 
 ```jsx harmony
-import AwesomeDebouncePromise from 'awesome-debounce-promise';
-
 const saveFieldValue = (fieldId, fieldValue) =>
   fetch('/saveField', {
     method: 'PUT',
