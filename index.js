@@ -60,16 +60,16 @@ export class DebounceCache {
 }
 
 const DefaultOptions = {
-  // By default, the key is null, which means that all the function calls
+  // One distinct debounced function is created per key and added to an internal cache
+  // By default, the key is null, which means that all the calls
   // will share the same debounced function
-  // Providing a key function permit to use the call arguments
-  // and route to a distinct debounced function
-  key: () => null,
+  key: (...args) => null,
 
   // By default, a debounced function will only resolve
   // the last promise it returned
   // Former calls will stay unresolved, so that you don't have
   // to handle concurrency issues in your code
+  // Setting this to false means all returned promises will resolve to the last result
   onlyResolvesLast: true,
 };
 

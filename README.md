@@ -58,7 +58,7 @@ When calling `debouncedSearchAPI`:
 - only the promise returned by the last call will resolve, which will prevent the concurrency issues
 - there will be at most a single `this.setState({ result });` call per api call
 
-## Debouncing the background saving of some form items
+## Debouncing the background saving of some form inputs
 
 ```jsx harmony
 const saveFieldValue = (fieldId, fieldValue) =>
@@ -103,20 +103,23 @@ class SearchInputAndResults extends React.Component {
 }
 ```
 
+Thanks to the `key` feature, the 2 fields will be debounced independently from each others. In practice, one debounced function is created for each key.
+
+
 # Options
 
 ```jsx harmony
 const DefaultOptions = {
-  // By default, the key is null, which means that all the function calls
+  // One distinct debounced function is created per key and added to an internal cache
+  // By default, the key is null, which means that all the calls
   // will share the same debounced function
-  // Providing a key function permit to use the call arguments
-  // and route to a distinct debounced function
-  key: () => null,
+  key: (...args) => null,
 
   // By default, a debounced function will only resolve
   // the last promise it returned
   // Former calls will stay unresolved, so that you don't have
   // to handle concurrency issues in your code
+  // Setting this to false means all returned promises will resolve to the last result
   onlyResolvesLast: true,
 };
 ```
