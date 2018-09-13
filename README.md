@@ -15,7 +15,14 @@ From the author of [this famous SO question](https://stackoverflow.com/a/2804673
 
 `npm install awesome-debounce-promise --save`
 
-`import AwesomeDebouncePromise from 'awesome-debounce-promise';`
+
+```jsx harmony
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
+
+const asyncFunction = () => fetch("/api");
+
+const asyncFunctionDebounced = AwesomeDebouncePromise(asyncFunction, 500, options)
+```
 
 # Usecases
 
@@ -95,19 +102,18 @@ class SearchInputAndResults extends React.Component {
 
 ```jsx harmony
 const DefaultOptions = {
-  // By default, the key is null, which means that all the function calls 
+  // By default, the key is null, which means that all the function calls
   // will share the same debounced function
-  // Providing a key function permit to use the call arguments 
+  // Providing a key function permit to use the call arguments
   // and route to a distinct debounced function
   key: () => null,
 
-  // By default, a debounced function will only resolve 
+  // By default, a debounced function will only resolve
   // the last promise it returned
-  // Former calls will stay unresolved, so that you don't have 
+  // Former calls will stay unresolved, so that you don't have
   // to handle concurrency issues in your code
   onlyResolvesLast: true,
 };
 ```
 
 Other debouncing options are available and provided by an external low-level library: [debounce-promise](https://github.com/bjoerge/debounce-promise)
-
