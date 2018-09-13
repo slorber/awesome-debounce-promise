@@ -1,0 +1,37 @@
+{
+  "name": "awesome-debounce-promise",
+  "version": "0.0.1",
+  "description": "Debounce your async calls",
+  "main": "awesome-debounce-promise.js",
+  "repository": "git@github.com:slorber/awesome-debounce-promise.git",
+  "author": "slorber <lorber.sebastien@gmail.com>",
+  "license": "MIT",
+  "private": false,
+  "scripts": {
+    "build": "babel index.js --out-file awesome-debounce-promise.js --plugins=transform-class-properties,transform-object-rest-spread --presets=es2015,react",
+    "release": "npm run build && npm publish"
+  },
+  "keywords": [
+    "react",
+    "promise",
+    "async",
+    "debounce",
+    "throttle",
+    "api"
+  ],
+  "bugs": {
+    "url": "https://github.com/slorber/awesome-debounce-promise/issues"
+  },
+  "homepage": "https://github.com/slorber/react-nested-loader#readme",
+  "devDependencies": {
+    "babel-cli": "^6.24.1",
+    "babel-core": "^6.5.2",
+    "babel-plugin-transform-class-properties": "^6.8.0",
+    "babel-plugin-transform-object-rest-spread": "^6.8.0",
+    "babel-preset-es2015": "^6.24.1",
+    "babel-preset-react": "^6.24.1"
+  },
+  "dependencies": {
+    "debounce-promise": "^3.1.0"
+  }
+}
