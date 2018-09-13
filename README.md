@@ -52,6 +52,7 @@ When calling `debouncedSearchAPI`:
 - it will debounce the api calls. The API will only be called when user stops typing
 - each call will return a promise
 - only the promise returned by the last call will resolve, which will prevent the concurrency issues
+- there will be at most a single `this.setState({ result });` call per api call
 
 ## Debouncing the background saving of some form items
 
