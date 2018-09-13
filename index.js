@@ -37,7 +37,7 @@ export const onlyResolvesLast = asyncFunction => {
 
 // We create a debouncing function cache, because when wrapping the original function,
 // we may actually want to route the function call to different debounced functions depending function paameters
-class DebounceCache {
+export class DebounceCache {
   constructor() {
     this.debounceCache = {};
   }
