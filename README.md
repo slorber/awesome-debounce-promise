@@ -44,6 +44,10 @@ class SearchInputAndResults extends React.Component {
     const result = await searchAPIDebounced(text);
     this.setState({ result });
   };
+  
+  compponentWillUnmount() {
+    this.setState = () => {};
+  }
 }
 ```
 
