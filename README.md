@@ -1,13 +1,11 @@
-Awesome Debounce Promise
-==========================
+# Awesome Debounce Promise
 
-Debounce your async calls with **React** in mind
+Debounce your async calls with **React** in mind.
 
-Forget about these annoying issues:
+Forget about:
 
-- promises after unmount
-- handle concurrency issues
-- leaving promise land for callback hell with lodash/underscore
+- concurrency issues when promise resolves in "unexpected" order
+- leaving promise land for callback hell of Lodash / Underscore
 
 From the author of [this famous SO question](https://stackoverflow.com/a/28046731/82609) about debouncing with React.
 
@@ -15,21 +13,93 @@ From the author of [this famous SO question](https://stackoverflow.com/a/2804673
 
 ## Debouncing a search input
 
+```jsx harmony
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 
+const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
 
+const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
 
-class SearchBox extends React.Component {
-    constructor(props) {
-        super(props);
-        this.method = debounce(this.method,1000);
-    }
-    method() { ... }
+class SearchInputAndResults extends React.Component {
+  state = {
+    text: '',
+    results: null,
+  };
+
+  handleTextChange = async text => {
+    this.setState({ text, results: null });
+    const result = await searchAPIDebounced(text);
+    this.setState({ result });
+  };
 }
+```
 
+When calling `debouncedSearchAPI`:
 
-- Debouncing search input / autocomplete results
-- Debouncing background saving of a text input
+- it will debounce the api calls. The API will only be called when user stops typing
+- each call will return a promise
+- only the promise returned by the last call will resolve, which will prevent the concurrency issues
 
+## Debouncing the background saving of some form items
 
+```jsx harmony
+import AwesomeDebouncePromise from 'awesome-debounce-promise';
 
+const saveFieldValue = (fieldId, fieldValue) =>
+  fetch('/saveField', {
+    method: 'PUT',
+    body: JSON.stringify({ fieldId, fieldValue }),
+  });
+
+const saveFieldValueDebounced = AwesomeDebouncePromise(
+  saveFieldValue,
+  500,
+  // Use a key to create distinct debouncing functions per field
+  { key: (fieldId, text) => fieldId },
+);
+
+class SearchInputAndResults extends React.Component {
+  state = {
+    value1: '',
+    value2: '',
+  };
+
+  onFieldTextChange = async (fieldId, fieldValue) => {
+    this.setState({ [fieldId]: fieldValue });
+    await saveFieldValueDebounced(fieldId, fieldValue);
+  };
+
+  render() {
+    const { value1, value2 } = this.state;
+    return (
+      <form>
+        <input
+          value={value1}
+          onChange={e => onFieldTextChange(1, e.target.value)}
+        />
+        <input
+          value={value2}
+          onChange={e => onFieldTextChange(2, e.target.value)}
+        />
+      </form>
+    );
+  }
+}
+```
+
+# Options
+
+```jsx harmony
+const DefaultOptions = {
+  // By default, the key is null, which means that all the function calls will share the same debounced function
+  // Providing a key function permit to use the call arguments and route to a distinct debounced function
+  key: () => null,
+
+  // By default, a debounced function will only resolve the last promise it returned
+  // Former calls will stay unresolved, so that you don't have to handle concurrency issues in your code
+  onlyResolvesLast: true,
+};
+```
+
+Other debouncing options are available and provided by an external low-level library: [debounce-promise](https://github.com/bjoerge/debounce-promise)
 

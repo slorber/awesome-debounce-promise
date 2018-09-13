@@ -1,6 +1,6 @@
 {
   "name": "awesome-debounce-promise",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Debounce your async calls",
   "main": "awesome-debounce-promise.js",
   "repository": "git@github.com:slorber/awesome-debounce-promise.git",
