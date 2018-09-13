@@ -95,12 +95,16 @@ class SearchInputAndResults extends React.Component {
 
 ```jsx harmony
 const DefaultOptions = {
-  // By default, the key is null, which means that all the function calls will share the same debounced function
-  // Providing a key function permit to use the call arguments and route to a distinct debounced function
+  // By default, the key is null, which means that all the function calls 
+  // will share the same debounced function
+  // Providing a key function permit to use the call arguments 
+  // and route to a distinct debounced function
   key: () => null,
 
-  // By default, a debounced function will only resolve the last promise it returned
-  // Former calls will stay unresolved, so that you don't have to handle concurrency issues in your code
+  // By default, a debounced function will only resolve 
+  // the last promise it returned
+  // Former calls will stay unresolved, so that you don't have 
+  // to handle concurrency issues in your code
   onlyResolvesLast: true,
 };
 ```
