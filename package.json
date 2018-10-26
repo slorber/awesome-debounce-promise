@@ -24,7 +24,7 @@
   "bugs": {
     "url": "https://github.com/slorber/awesome-debounce-promise/issues"
   },
-  "homepage": "https://github.com/slorber/react-nested-loader#readme",
+  "homepage": "https://github.com/slorber/awesome-debounce-promise",
   "devDependencies": {
     "babel-cli": "^6.24.1",
     "babel-core": "^6.5.2",
