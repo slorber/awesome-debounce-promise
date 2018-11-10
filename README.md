@@ -45,7 +45,7 @@ class SearchInputAndResults extends React.Component {
     this.setState({ result });
   };
   
-  compponentWillUnmount() {
+  componentWillUnmount() {
     this.setState = () => {};
   }
 }
