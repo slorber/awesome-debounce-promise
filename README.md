@@ -126,6 +126,38 @@ const DefaultOptions = {
 
 Other debouncing options are available and provided by an external low-level library: [debounce-promise](https://github.com/bjoerge/debounce-promise)
 
+# Troubleshooting
+
+### My debouncing function always fire and is not debounced
+
+The debouncing function returned by the lib is stateful. If you want deboucing to work fine, make sure to avoid recreating this function everytime. This is the same behavior as regular callback-based debouncing functions.
+
+Instead of this:
+
+```js
+handleTextChange = async text => {
+    const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
+    const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
+    this.setState({ text, results: null });
+    const result = await searchAPIDebounced(text);
+    this.setState({ result });
+};
+```
+
+Do this:
+
+```js
+const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
+const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
+
+handleTextChange = async text => {
+    this.setState({ text, results: null });
+    const result = await searchAPIDebounced(text);
+    this.setState({ result });
+};
+```
+
+
 # Hire a freelance expert
 
 Looking for a React/ReactNative freelance expert with more than 5 years production experience?
