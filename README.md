@@ -1,7 +1,6 @@
 # Awesome Debounce Promise
 
 [![NPM](https://img.shields.io/npm/dm/awesome-debounce-promise.svg)](https://www.npmjs.com/package/awesome-debounce-promise) 
-
 [![Build Status](https://travis-ci.com/slorber/awesome-debounce-promise.svg?branch=master)](https://travis-ci.com/slorber/awesome-debounce-promise)
 
 Debounce your async calls with **React** in mind.
