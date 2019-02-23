@@ -18,7 +18,7 @@ const DefaultOptions = {
   // One distinct debounced function is created per key and added to an internal cache
   // By default, the key is null, which means that all the calls
   // will share the same debounced function
-  key: (...args: any[]) => DefaultKey,
+  key: (..._args: any[]) => DefaultKey,
 
   // By default, a debounced function will only resolve
   // the last promise it returned
@@ -53,7 +53,7 @@ export class DebounceCache {
     if (!this.debounceCache[key]) {
       let debouncedFunc = debouncePromise(func, wait, otherOptions);
       if (onlyResolvesLastOption) {
-        debouncedFunc = onlyResolvesLast(debouncedFunc) as any; // TODO fix TS
+        debouncedFunc = onlyResolvesLast(debouncedFunc as any); // TODO fix TS
       }
       this.debounceCache[key] = debouncedFunc;
     }
