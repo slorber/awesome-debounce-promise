@@ -21,12 +21,12 @@
     "prepare": "yarn run build"
   },
   "dependencies": {
+    "@types/debounce-promise": "^3.1.1",
     "awesome-only-resolves-last-promise": "^1.0.2",
     "debounce-promise": "^3.1.0"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
-    "@types/debounce-promise": "^3.1.1",
     "@types/jest": "^24.0.6",
     "@types/react": "^16.3.13",
     "@types/react-dom": "^16.0.5",
