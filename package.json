@@ -1,6 +1,6 @@
 {
   "name": "awesome-debounce-promise",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "Debounce your async calls",
   "author": "slorber",
   "license": "MIT",
