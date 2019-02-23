@@ -1,0 +1,5 @@
+.gitignore
+.prettierignore
+.editorconfig
+dist/
+yarn.lock

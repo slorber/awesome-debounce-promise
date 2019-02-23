@@ -15,26 +15,26 @@ beforeEach(() => {
 const isPromiseResolved = async promise => {
   const SecondResult = {};
   const shouldResolveFirst = new Promise(resolve => resolve(SecondResult));
-  const result = await Promise.race([promise,shouldResolveFirst]);
+  const result = await Promise.race([promise, shouldResolveFirst]);
   return result !== SecondResult;
 };
 
-const expectPromiseResolved = async (promise,shouldBeResolved) => {
+const expectPromiseResolved = async (promise, shouldBeResolved) => {
   const isResolved = await isPromiseResolved(promise);
-  if ( isResolved && !shouldBeResolved ) {
-    throw new Error("Promise is NOT expected to be resolved");
-  }
-  else if ( !isResolved && shouldBeResolved ) {
-    throw new Error("Promise is expected to be resolved");
+  if (isResolved && !shouldBeResolved) {
+    throw new Error('Promise is NOT expected to be resolved');
+  } else if (!isResolved && shouldBeResolved) {
+    throw new Error('Promise is expected to be resolved');
   }
 };
 
-const expectAllPromisesResolved = async (promises,shouldBeResolve) => {
-  await Promise.all(promises.map(async promise => {
-    await expectPromiseResolved(promise,shouldBeResolve);
-  }));
+const expectAllPromisesResolved = async (promises, shouldBeResolve) => {
+  await Promise.all(
+    promises.map(async promise => {
+      await expectPromiseResolved(promise, shouldBeResolve);
+    }),
+  );
 };
-
 
 test('basic debouncing', async () => {
   // Given
@@ -51,12 +51,14 @@ test('basic debouncing', async () => {
   expect(result).toBe(5);
   expect(resolve).toHaveBeenCalledTimes(1);
   expect(reject).toHaveBeenCalledTimes(0);
-  await expectAllPromisesResolved(previousCalls,false);
+  await expectAllPromisesResolved(previousCalls, false);
 });
 
 test('basic debouncing with onlyResolvesLast=false', async () => {
   // Given
-  const debounced = AwesomeDebouncePromise(resolve, 100,{onlyResolvesLast: false});
+  const debounced = AwesomeDebouncePromise(resolve, 100, {
+    onlyResolvesLast: false,
+  });
   // When
   const previousCalls = [
     debounced(1),
@@ -69,15 +71,14 @@ test('basic debouncing with onlyResolvesLast=false', async () => {
   expect(result).toBe(5);
   expect(resolve).toHaveBeenCalledTimes(1);
   expect(reject).toHaveBeenCalledTimes(0);
-  await expectAllPromisesResolved(previousCalls,true);
+  await expectAllPromisesResolved(previousCalls, true);
 });
 
 test('debouncing with key', async () => {
   // Given
-  const debounced = AwesomeDebouncePromise(resolve,
-    100,
-    { key: (result, keyArg) => 'key:' + keyArg },
-  );
+  const debounced = AwesomeDebouncePromise(resolve, 100, {
+    key: (result, keyArg) => 'key:' + keyArg,
+  });
   // When
   const previousCalls = [
     debounced(1, 'key1'),
@@ -89,10 +90,10 @@ test('debouncing with key', async () => {
     debounced(7, 'key2'),
     debounced(8, 'key2'),
   ];
-  const [key1result,key2result, key3result] = await Promise.all([
-    debounced(9,"key1"),
-    debounced(10,"key2"),
-    debounced(11,"key3"),
+  const [key1result, key2result, key3result] = await Promise.all([
+    debounced(9, 'key1'),
+    debounced(10, 'key2'),
+    debounced(11, 'key3'),
   ]);
   // Then
   expect(key1result).toBe(9);
@@ -100,5 +101,5 @@ test('debouncing with key', async () => {
   expect(key3result).toBe(11);
   expect(resolve).toHaveBeenCalledTimes(3);
   expect(reject).toHaveBeenCalledTimes(0);
-  await expectAllPromisesResolved(previousCalls,false);
+  await expectAllPromisesResolved(previousCalls, false);
 });
