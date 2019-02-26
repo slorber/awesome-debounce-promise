@@ -1,6 +1,6 @@
 {
   "name": "awesome-debounce-promise",
-  "version": "2.0.1",
+  "version": "2.1.0",
   "description": "Debounce your async calls",
   "author": "slorber",
   "license": "MIT",
@@ -25,12 +25,12 @@
   },
   "dependencies": {
     "@types/debounce-promise": "^3.1.1",
+    "awesome-imperative-promise": "^1.0.1",
     "awesome-only-resolves-last-promise": "^1.0.3",
     "debounce-promise": "^3.1.0"
   },
   "devDependencies": {
     "@types/jest": "^24.0.6",
-    "awesome-imperative-promise": "^1.0.1",
     "cross-env": "^5.2.0",
     "prettier": "^1.16.4",
     "react-scripts-ts": "^3.1.0",
