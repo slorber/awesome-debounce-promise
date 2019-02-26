@@ -1,4 +1,4 @@
-import * as DebouncePromise from 'debounce-promise';
+import DebouncePromise from 'debounce-promise';
 import { onlyResolvesLast } from 'awesome-only-resolves-last-promise';
 
 type ArgumentsType<T> = T extends (...args: infer A) => any ? A : never;

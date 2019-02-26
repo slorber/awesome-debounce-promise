@@ -1,25 +1,23 @@
 import AwesomeDebouncePromise from './index';
 
-let resolve;
-let reject;
-
-beforeEach(() => {
-  // An async function whose result will be the first arg
-  resolve = jest.fn(result => new Promise(resolve => resolve(result)));
-  reject = jest.fn(
-    () => new Promise((resolve, reject) => reject(new Error('rejected'))),
-  );
-});
+const asyncTestUtils = () => {
+  return {
+    asyncResolve: jest.fn(result => new Promise(resolve => resolve(result))),
+    asyncReject: jest.fn(
+      () => new Promise((_resolve, reject) => reject(new Error('rejected'))),
+    ),
+  };
+};
 
 // Hacky way to know if a promise is resolved or not
-const isPromiseResolved = async promise => {
+const isPromiseResolved = async (promise: Promise<any>) => {
   const SecondResult = {};
   const shouldResolveFirst = new Promise(resolve => resolve(SecondResult));
   const result = await Promise.race([promise, shouldResolveFirst]);
   return result !== SecondResult;
 };
 
-const expectPromiseResolved = async (promise, shouldBeResolved) => {
+const expectPromiseResolved = async (promise: Promise<any>, shouldBeResolved: boolean) => {
   const isResolved = await isPromiseResolved(promise);
   if (isResolved && !shouldBeResolved) {
     throw new Error('Promise is NOT expected to be resolved');
@@ -28,9 +26,9 @@ const expectPromiseResolved = async (promise, shouldBeResolved) => {
   }
 };
 
-const expectAllPromisesResolved = async (promises, shouldBeResolve) => {
+const expectAllPromisesResolved = async (promises: Promise<any>[], shouldBeResolve: boolean) => {
   await Promise.all(
-    promises.map(async promise => {
+    promises.map(async (promise: Promise<any>) => {
       await expectPromiseResolved(promise, shouldBeResolve);
     }),
   );
@@ -38,7 +36,8 @@ const expectAllPromisesResolved = async (promises, shouldBeResolve) => {
 
 test('basic debouncing', async () => {
   // Given
-  const debounced = AwesomeDebouncePromise(resolve, 100);
+  const { asyncResolve, asyncReject } = asyncTestUtils();
+  const debounced = AwesomeDebouncePromise(asyncResolve, 100);
   // When
   const previousCalls = [
     debounced(1),
@@ -49,14 +48,15 @@ test('basic debouncing', async () => {
   const result = await debounced(5);
   // Then
   expect(result).toBe(5);
-  expect(resolve).toHaveBeenCalledTimes(1);
-  expect(reject).toHaveBeenCalledTimes(0);
+  expect(asyncResolve).toHaveBeenCalledTimes(1);
+  expect(asyncReject).toHaveBeenCalledTimes(0);
   await expectAllPromisesResolved(previousCalls, false);
 });
 
 test('basic debouncing with onlyResolvesLast=false', async () => {
   // Given
-  const debounced = AwesomeDebouncePromise(resolve, 100, {
+  const { asyncResolve, asyncReject } = asyncTestUtils();
+  const debounced = AwesomeDebouncePromise(asyncResolve, 100, {
     onlyResolvesLast: false,
   });
   // When
@@ -69,15 +69,16 @@ test('basic debouncing with onlyResolvesLast=false', async () => {
   const result = await debounced(5);
   // Then
   expect(result).toBe(5);
-  expect(resolve).toHaveBeenCalledTimes(1);
-  expect(reject).toHaveBeenCalledTimes(0);
+  expect(asyncResolve).toHaveBeenCalledTimes(1);
+  expect(asyncReject).toHaveBeenCalledTimes(0);
   await expectAllPromisesResolved(previousCalls, true);
 });
 
 test('debouncing with key', async () => {
   // Given
-  const debounced = AwesomeDebouncePromise(resolve, 100, {
-    key: (result, keyArg) => 'key:' + keyArg,
+  const { asyncResolve, asyncReject } = asyncTestUtils();
+  const debounced = AwesomeDebouncePromise(asyncResolve, 100, {
+    key: (_result, keyArg) => 'key:' + keyArg,
   });
   // When
   const previousCalls = [
@@ -99,7 +100,7 @@ test('debouncing with key', async () => {
   expect(key1result).toBe(9);
   expect(key2result).toBe(10);
   expect(key3result).toBe(11);
-  expect(resolve).toHaveBeenCalledTimes(3);
-  expect(reject).toHaveBeenCalledTimes(0);
+  expect(asyncResolve).toHaveBeenCalledTimes(3);
+  expect(asyncReject).toHaveBeenCalledTimes(0);
   await expectAllPromisesResolved(previousCalls, false);
 });
