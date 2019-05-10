@@ -5,12 +5,13 @@
 
 Debounce your async calls with **React** in mind.
 
-Forget about:
+- No callback hell of lodash/underscore
+- Handle concurrent requests nicely (only use last request's response)
+- Typescript support (native and well typed)
+- Read in mind, but can be used in other contexts (no dependency)
 
-- concurrency issues when promise resolves in "unexpected" order
-- leaving promise land for callback hell of Lodash / Underscore
+Read also [this famous SO question](https://stackoverflow.com/a/28046731/82609) about debouncing with React.
 
-From the author of [this famous SO question](https://stackoverflow.com/a/28046731/82609) about debouncing with React.
 
 # Install
 
@@ -30,9 +31,11 @@ const asyncFunctionDebounced = AwesomeDebouncePromise(
 );
 ```
 
+For Typescript, you need the compiler option `"esModuleInterop": true`
+
 # Usecases
 
-## Debouncing a search input
+## Debouncing a search input (with React class)
 
 ```jsx harmony
 const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
@@ -63,6 +66,31 @@ When calling `debouncedSearchAPI`:
 - each call will return a promise
 - only the promise returned by the last call will resolve, which will prevent the concurrency issues
 - there will be at most a single `this.setState({ result });` call per api call
+
+## Debouncing a search input (with React hooks)
+
+I recommend solving this problem with [react-async-hook](https://github.com/slorber/react-async-hook), which plays well with `awesome-debounce-promise`. You'll find more informations on `react-async-hook` readme and runnable examples.
+
+```tsx
+const useSearchStarwarsHero = () => {
+  // Handle the input text state
+  const [inputText, setInputText] = useState('');
+
+  // Debounce the original search async function
+  const debouncedSearchStarwarsHero = useConstant(() =>
+    AwesomeDebouncePromise(searchStarwarsHero, 300)
+  );
+
+  const search = useAsync(debouncedSearchStarwarsHero,[inputText]);
+
+  // Return everything needed for the hook consumer
+  return {
+    inputText,
+    setInputText,
+    search,
+  };
+};
+```
 
 ## Debouncing the background saving of some form inputs
 
@@ -165,6 +193,15 @@ handleTextChange = async text => {
   this.setState({ result });
 };
 ```
+
+# Dependencies
+
+This library is a combination of multiple low-level tiny microlibs:
+
+- [debounce-promise](https://github.com/bjoerge/debounce-promise)
+- [awesome-only-resolves-last-promise](https://github.com/slorber/awesome-only-resolves-last-promise)
+- [awesome-imperative-promise](https://github.com/slorber/awesome-imperative-promise)
+
 
 # Hire a freelance expert
 
