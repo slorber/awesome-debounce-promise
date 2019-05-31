@@ -8,7 +8,7 @@ Debounce your async calls with **React** in mind.
 - No callback hell of lodash/underscore
 - Handle concurrent requests nicely (only use last request's response)
 - Typescript support (native and well typed)
-- Read in mind, but can be used in other contexts (no dependency)
+- React in mind, but can be used in other contexts (no dependency)
 
 Read also [this famous SO question](https://stackoverflow.com/a/28046731/82609) about debouncing with React.
 
