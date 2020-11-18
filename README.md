@@ -29,6 +29,10 @@ const asyncFunctionDebounced = AwesomeDebouncePromise(
   500,
   options,
 );
+
+asyncFunctionDebounced().then(console.log); // no request fired, promise will never resolve
+asyncFunctionDebounced().then(console.log); // no request fired, promise will never resolve
+asyncFunctionDebounced().then(console.log); // request fired, promise will resolve with response
 ```
 
 For Typescript, you need the compiler option `"esModuleInterop": true`
