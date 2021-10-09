@@ -56,19 +56,24 @@ const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
 const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
 
 class SearchInputAndResults extends React.Component {
+  mounted = true;
+
   state = {
     text: '',
     results: null,
   };
 
-  handleTextChange = async text => {
-    this.setState({ text, results: null });
-    const result = await searchAPIDebounced(text);
-    this.setState({ result });
+  handleTextChange = text => {
+    this.setState({ text, results: null }, async () => {
+      const results = await searchAPIDebounced(text);
+      if (this.mounted) {
+        this.setState({ results });
+      }
+    });
   };
 
   componentWillUnmount() {
-    this.setState = () => {};
+    this.mounted = false;
   }
 }
 ```
@@ -127,9 +132,10 @@ class SearchInputAndResults extends React.Component {
     value2: '',
   };
 
-  onFieldTextChange = async (fieldId, fieldValue) => {
-    this.setState({ [fieldId]: fieldValue });
-    await saveFieldValueDebounced(fieldId, fieldValue);
+  onFieldTextChange = (fieldId, fieldValue) => {
+    this.setState({ [fieldId]: fieldValue }, async () => {
+      await saveFieldValueDebounced(fieldId, fieldValue);
+    });
   };
 
   render() {
@@ -185,12 +191,13 @@ The debouncing function returned by the lib is stateful. If you want deboucing t
 Instead of this:
 
 ```js
-handleTextChange = async text => {
+handleTextChange = text => {
   const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
   const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
-  this.setState({ text, results: null });
-  const result = await searchAPIDebounced(text);
-  this.setState({ result });
+  this.setState({ text, results: null }, async () => {
+    const results = await searchAPIDebounced(text);
+    this.setState({ results });
+  });
 };
 ```
 
@@ -200,10 +207,11 @@ Do this:
 const searchAPI = text => fetch('/search?text=' + encodeURIComponent(text));
 const searchAPIDebounced = AwesomeDebouncePromise(searchAPI, 500);
 
-handleTextChange = async text => {
-  this.setState({ text, results: null });
-  const result = await searchAPIDebounced(text);
-  this.setState({ result });
+handleTextChange = text => {
+  this.setState({ text, results: null }, async () => {
+    const results = await searchAPIDebounced(text);
+    this.setState({ results });
+  });
 };
 ```
 
